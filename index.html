@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create scripture links and QR codes for scriptures, conference talks, and Gospel Library paragraphs.">
+  <title>Scripture Link · Scripture QR Maker</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="books.js"></script><script defer src="reference.js"></script><script defer src="vendor/qrcode.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<header><a class="brand" href="./"><span class="brand-icon" aria-hidden="true">↗</span> SCRIPTURE LINK</a><span class="header-note">A little easier to share.</span></header>
+<main>
+  <div class="intro"><span class="eyebrow">GOSPEL LIBRARY, ONE SCAN AWAY</span><h1>Share a verse.<br><em>Start a connection.</em></h1><p>Turn a scripture reference or Gospel Library link into a QR code.<br class="desktop"> Ready for your next lesson, handout, or conversation.</p></div>
+  <div class="workspace">
+    <section class="input-panel" aria-labelledby="input-title"><span class="step">01 / CHOOSE WHAT TO SHARE</span><h2 id="input-title">Where would you like to go?</h2>
+      <form id="form" novalidate><label for="reference">Scripture reference or share link</label><input id="reference" name="reference" list="suggestions" autocomplete="off" placeholder="e.g. 1 Nephi 11:17 or paste a share link" value="1 Nephi 11:17" aria-describedby="hint error" required><datalist id="suggestions"></datalist><p id="hint" class="hint">Enter a reference like John 3:16–17, or paste an lds.org or ChurchofJesusChrist.org share link. To share a specific paragraph, select it in Gospel Library and copy its share link. Paragraph selections and language settings are preserved.</p><p id="error" class="error" role="alert" hidden></p><button class="primary" type="submit">Create link & QR code <span aria-hidden="true">↗</span></button></form>
+      <div class="examples"><span>TRY A REFERENCE</span><div><button type="button" data-example="1 Nephi 11:17">1 Nephi 11:17</button><button type="button" data-example="D&C 6:36">D&C 6:36</button><button type="button" data-example="John 3:16-17">John 3:16–17</button></div></div>
+      <div class="coverage"><span aria-hidden="true">✦</span><p><strong>Scriptures, talks & more</strong><br>Old & New Testaments, Book of Mormon, Doctrine & Covenants, and Pearl of Great Price. Paste share links for conference talks, lessons, and other Gospel Library content.</p></div>
+    </section>
+    <section class="result-panel" aria-labelledby="result-title"><span class="step">02 / READY TO SHARE</span><h2 id="result-title">1 Nephi 11:17</h2><p class="result-caption">A small code. A meaningful destination.</p><div class="qr-frame"><canvas id="qr" width="768" height="768" role="img" aria-label="Scripture QR code"></canvas></div><button id="download" class="download" type="button">↓ &nbsp; Download QR code <span>PNG</span></button><label for="link">Your share link</label><div class="link-row"><input id="link" readonly><button id="copy" type="button">Copy</button></div><a id="open" target="_blank" rel="noopener noreferrer">Open link <span aria-hidden="true">↗</span></a></section>
+  </div>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+  <div class="bottom-note"><span aria-hidden="true">◎</span> Made for sharing. No sign-in. No tracking. Ready to share.</div>
+</main>
+<footer><span>SCRIPTURE LINK</span><p>An independent tool. Supports ChurchofJesusChrist.org and legacy lds.org links.</p></footer>
+</body></html>
