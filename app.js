@@ -24,8 +24,46 @@ function generate() {
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#000000';
+    const finders = [[0, 0], [0, count - 7], [count - 7, 0]];
     for (let row = 0; row < count; row++) for (let col = 0; col < count; col++) {
-      if (code.isDark(row, col)) ctx.fillRect((col+4)*scale, (row+4)*scale, scale, scale);
+      if (!code.isDark(row, col)) continue;
+      if (finders.some(([r, c]) => row >= r && row < r + 7 && col >= c && col < c + 7)) continue;
+      // Round only exposed corners so adjacent dark blocks remain connected.
+      const dark = (r, c) => r >= 0 && c >= 0 && r < count && c < count && code.isDark(r, c);
+      const top = dark(row - 1, col), bottom = dark(row + 1, col);
+      const left = dark(row, col - 1), right = dark(row, col + 1);
+      const radius = scale * 0.4;
+      const tl = !top && !left ? radius : 0, tr = !top && !right ? radius : 0;
+      const br = !bottom && !right ? radius : 0, bl = !bottom && !left ? radius : 0;
+      const x = (col + 4) * scale, y = (row + 4) * scale, endX = x + scale, endY = y + scale;
+      ctx.beginPath();
+      ctx.moveTo(x + tl, y);
+      ctx.lineTo(endX - tr, y); ctx.quadraticCurveTo(endX, y, endX, y + tr);
+      ctx.lineTo(endX, endY - br); ctx.quadraticCurveTo(endX, endY, endX - br, endY);
+      ctx.lineTo(x + bl, endY); ctx.quadraticCurveTo(x, endY, x, endY - bl);
+      ctx.lineTo(x, y + tl); ctx.quadraticCurveTo(x, y, x + tl, y);
+      ctx.closePath(); ctx.fill();
+    }
+    // Draw each finder as continuous nested shapes, preserving its 7:5:3 proportions.
+    function roundedSquare(x, y, size, radius, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + size - radius, y);
+      ctx.quadraticCurveTo(x + size, y, x + size, y + radius);
+      ctx.lineTo(x + size, y + size - radius);
+      ctx.quadraticCurveTo(x + size, y + size, x + size - radius, y + size);
+      ctx.lineTo(x + radius, y + size);
+      ctx.quadraticCurveTo(x, y + size, x, y + size - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath(); ctx.fill();
+    }
+    for (const [row, col] of finders) {
+      const x = (col + 4) * scale, y = (row + 4) * scale;
+      roundedSquare(x, y, 7 * scale, 1.4 * scale, '#000000');
+      roundedSquare(x + scale, y + scale, 5 * scale, 0.8 * scale, '#ffffff');
+      roundedSquare(x + 2 * scale, y + 2 * scale, 3 * scale, 0.6 * scale, '#000000');
     }
     current = result;
     document.querySelector('#result-title').textContent = result.label;
